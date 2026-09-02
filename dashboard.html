@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Talentvora | Dashboard</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:#f4f6fb;
+}
+
+header{
+background:#6A0DAD;
+color:white;
+padding:20px 50px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+header h2{
+font-size:30px;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+margin-left:20px;
+font-weight:bold;
+}
+
+nav a:hover{
+color:yellow;
+}
+
+.hero{
+text-align:center;
+padding:40px;
+background:linear-gradient(to right,#6A0DAD,#9B59B6);
+color:white;
+}
+
+.hero h1{
+font-size:40px;
+margin-bottom:10px;
+}
+
+.hero p{
+font-size:20px;
+}
+
+.container{
+padding:50px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:15px;
+box-shadow:0 5px 15px rgba(0,0,0,.2);
+text-align:center;
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-8px);
+}
+
+.card h3{
+color:#6A0DAD;
+margin-bottom:15px;
+}
+
+.card p{
+margin-bottom:20px;
+}
+
+.card a{
+display:inline-block;
+padding:10px 20px;
+background:#6A0DAD;
+color:white;
+text-decoration:none;
+border-radius:20px;
+}
+
+.card a:hover{
+background:#4B0082;
+}
+
+footer{
+background:#6A0DAD;
+color:white;
+text-align:center;
+padding:20px;
+margin-top:30px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h2>Talentvora Dashboard</h2>
+
+<nav>
+
+<a href="dashboard.html">Home</a>
+<a href="profile.html">Profile</a>
+<a href="index.html">Logout</a>
+
+</nav>
+
+</header>
+
+<section class="hero">
+
+<h1>Welcome to Talentvora</h1>
+
+<p>Select any module to continue.</p>
+
+</section>
+
+<div class="container">
+
+<div class="card">
+<h3>👤 User Profile</h3>
+<p>Manage your profile and personal details.</p>
+<a href="profile.html">Open</a>
+</div>
+
+<div class="card">
+<h3>🏠 Home Feed</h3>
+<p>View trending and latest posts.</p>
+<a href="homefeed.html">Open</a>
+</div>
+
+<div class="card">
+<h3>😊 Mood Zone</h3>
+<p>Share your mood and receive support.</p>
+<a href="mood.html">Open</a>
+</div>
+
+<div class="card">
+<h3>😂 Entertainment</h3>
+<p>Watch funny videos and memes.</p>
+<a href="entertainment.html">Open</a>
+</div>
+
+<div class="card">
+<h3>📚 Learning Hub</h3>
+<p>Study tutorials and daily quizzes.</p>
+<a href="learning.html">Open</a>
+</div>
+
+<div class="card">
+<h3>🎨 Talent Showcase</h3>
+<p>Share your talents with everyone.</p>
+<a href="talent.html">Open</a>
+</div>
+
+<div class="card">
+<h3>👥 Community</h3>
+<p>Like, comment and follow users.</p>
+<a href="community.html">Open</a>
+</div>
+
+<div class="card">
+<h3>💬 Messaging</h3>
+<p>Chat with friends and groups.</p>
+<a href="chat.html">Open</a>
+</div>
+
+<div class="card">
+<h3>🔔 Notifications</h3>
+<p>View your latest notifications.</p>
+<a href="notifications.html">Open</a>
+</div>
+
+<div class="card">
+<h3>🏆 Challenges</h3>
+<p>Complete challenges and earn badges.</p>
+<a href="challenges.html">Open</a>
+</div>
+
+<div class="card">
+<h3>👨‍💼 Admin Panel</h3>
+<p>Manage users and website content.</p>
+<a href="admin.html">Open</a>
+</div>
+
+<div class="card">
+<h3>🚪 Logout</h3>
+<p>Return to the home page.</p>
+<a href="index.html">Logout</a>
+</div>
+
+</div>
+
+<footer>
+
+<p>© 2026 Talentvora | Learn • Share • Inspire</p>
+
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Talentvora | Home Feed</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f4f6fb;
+}
+
+header{
+background:#6A0DAD;
+color:white;
+padding:15px 30px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+header h2{
+font-size:30px;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+margin-left:20px;
+font-weight:bold;
+}
+
+nav a:hover{
+color:yellow;
+}
+
+.search{
+text-align:center;
+padding:20px;
+background:white;
+}
+
+.search input{
+width:60%;
+padding:12px;
+border-radius:25px;
+border:1px solid #ccc;
+font-size:16px;
+}
+
+.menu{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+gap:15px;
+padding:25px;
+}
+
+.menu a{
+background:#6A0DAD;
+color:white;
+text-decoration:none;
+padding:15px;
+text-align:center;
+border-radius:10px;
+font-weight:bold;
+}
+
+.menu a:hover{
+background:#4B0082;
+}
+
+.feed{
+width:90%;
+max-width:900px;
+margin:20px auto;
+}
+
+.post{
+background:white;
+padding:20px;
+margin-bottom:20px;
+border-radius:10px;
+box-shadow:0 5px 10px rgba(0,0,0,.2);
+}
+
+.post h3{
+color:#6A0DAD;
+margin-bottom:10px;
+}
+
+.actions{
+margin-top:15px;
+}
+
+.actions button{
+padding:10px 18px;
+margin-right:10px;
+background:#6A0DAD;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+.actions button:hover{
+background:#4B0082;
+}
+
+footer{
+background:#6A0DAD;
+color:white;
+text-align:center;
+padding:20px;
+margin-top:30px;
+}
+
+</style>
+
+<script>
+function likePost(){
+alert("❤️ You liked this post!");
+}
+
+function commentPost(){
+alert("💬 Comment feature will be added in PHP.");
+}
+
+function sharePost(){
+alert("📤 Share feature will be added later.");
+}
+</script>
+
+</head>
+
+<body>
+
+<header>
+
+<h2>Talentvora</h2>
+
+<nav>
+
+<a href="dashboard.html">Dashboard</a>
+<a href="profile.html">Profile</a>
+<a href="index.html">Logout</a>
+
+</nav>
+
+</header>
+
+<div class="search">
+
+<input type="text" placeholder="Search users, talents, posts...">
+
+</div>
+
+<div class="menu">
+
+<a href="profile.html">👤 Profile</a>
+
+<a href="mood.html">😊 Mood Zone</a>
+
+<a href="entertainment.html">😂 Entertainment</a>
+
+<a href="learning.html">📚 Learning Hub</a>
+
+<a href="talent.html">🎨 Talent Showcase</a>
+
+<a href="community.html">👥 Community</a>
+
+<a href="chat.html">💬 Messaging</a>
+
+<a href="notifications.html">🔔 Notifications</a>
+
+<a href="challenges.html">🏆 Challenges</a>
+
+<a href="admin.html">👨‍💼 Admin Panel</a>
+
+</div>
+
+<div class="feed">
+
+<div class="post">
+
+<h3>🌟 Trending Post</h3>
+
+<p>
+Welcome to Talentvora! Share your talent, learn new skills,
+and connect with people from around the world.
+</p>
+
+<div class="actions">
+
+<button onclick="likePost()">❤️ Like</button>
+
+<button onclick="commentPost()">💬 Comment</button>
+
+<button onclick="sharePost()">📤 Share</button>
+
+</div>
+
+</div>
+
+<div class="post">
+
+<h3>📚 Learning Update</h3>
+
+<p>
+Today's coding challenge is now available in the Learning Hub.
+Complete it to earn achievement badges.
+</p>
+
+<div class="actions">
+
+<button onclick="likePost()">❤️ Like</button>
+
+<button onclick="commentPost()">💬 Comment</button>
+
+<button onclick="sharePost()">📤 Share</button>
+
+</div>
+
+</div>
+
+<div class="post">
+
+<h3>🎨 Talent Showcase</h3>
+
+<p>
+Upload your singing, dancing, coding, drawing,
+photography or writing and inspire others.
+</p>
+
+<div class="actions">
+
+<button onclick="likePost()">❤️ Like</button>
+
+<button onclick="commentPost()">💬 Comment</button>
+
+<button onclick="sharePost()">📤 Share</button>
+
+</div>
+
+</div>
+
+</div>
+
+<footer>
+
+<p>© 2026 Talentvora | Home Feed</p>
+
+</footer>
+
+</body>
+</html>

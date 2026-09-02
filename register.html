@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Talentvora | Register</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:linear-gradient(to right,#6A0DAD,#9B59B6);
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.container{
+background:white;
+width:420px;
+padding:35px;
+border-radius:15px;
+box-shadow:0 5px 15px rgba(0,0,0,.3);
+}
+
+h2{
+text-align:center;
+color:#6A0DAD;
+margin-bottom:20px;
+}
+
+input{
+width:100%;
+padding:12px;
+margin:10px 0;
+border:1px solid #ccc;
+border-radius:8px;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#6A0DAD;
+color:white;
+border:none;
+border-radius:8px;
+font-size:18px;
+cursor:pointer;
+margin-top:15px;
+}
+
+button:hover{
+background:#4B0082;
+}
+
+p{
+text-align:center;
+margin-top:20px;
+}
+
+a{
+color:#6A0DAD;
+font-weight:bold;
+text-decoration:none;
+}
+
+a:hover{
+text-decoration:underline;
+}
+
+</style>
+
+<script>
+
+function registerUser(){
+
+var password=document.getElementById("password").value;
+var confirm=document.getElementById("confirm").value;
+
+if(password!=confirm){
+
+alert("Passwords do not match.");
+
+return false;
+
+}
+
+alert("Registration Successful!");
+
+window.location.href="login.html";
+
+return false;
+
+}
+
+</script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Create Account</h2>
+
+<form onsubmit="return registerUser()">
+
+<input type="text"
+placeholder="Full Name"
+required
+pattern="[A-Za-z ]+"
+title="Name should contain only letters">
+
+<input type="email"
+placeholder="Email Address"
+required>
+
+<input type="password"
+id="password"
+placeholder="Password"
+required>
+
+<input type="password"
+id="confirm"
+placeholder="Confirm Password"
+required>
+
+<input type="text"
+placeholder="Skills">
+
+<input type="text"
+placeholder="Interests">
+
+<button type="submit">Register</button>
+
+</form>
+
+<p>
+
+Already have an account?
+
+<a href="login.html">Login</a>
+
+</p>
+
+</div>
+
+</body>
+</html>

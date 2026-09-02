@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Talentvora | Admin Panel</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:#f4f6fb;
+}
+
+header{
+background:#6A0DAD;
+color:white;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 30px;
+}
+
+header h2{
+font-size:30px;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+margin-left:20px;
+font-weight:bold;
+}
+
+nav a:hover{
+color:yellow;
+}
+
+.hero{
+background:linear-gradient(to right,#6A0DAD,#9B59B6);
+color:white;
+text-align:center;
+padding:40px;
+}
+
+.hero h1{
+font-size:42px;
+margin-bottom:10px;
+}
+
+.hero p{
+font-size:18px;
+}
+
+.container{
+padding:40px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:25px;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:15px;
+box-shadow:0 5px 15px rgba(0,0,0,.2);
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-8px);
+}
+
+.card h3{
+color:#6A0DAD;
+margin-bottom:10px;
+}
+
+.card p{
+line-height:1.6;
+margin-bottom:20px;
+}
+
+button{
+background:#6A0DAD;
+color:white;
+border:none;
+padding:10px 20px;
+border-radius:8px;
+cursor:pointer;
+font-size:15px;
+}
+
+button:hover{
+background:#4B0082;
+}
+
+.stats{
+width:90%;
+max-width:900px;
+margin:30px auto;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:20px;
+}
+
+.box{
+background:white;
+padding:20px;
+text-align:center;
+border-radius:15px;
+box-shadow:0 5px 15px rgba(0,0,0,.2);
+}
+
+.box h2{
+color:#6A0DAD;
+}
+
+.menu{
+padding:30px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:15px;
+}
+
+.menu a{
+background:#6A0DAD;
+color:white;
+text-decoration:none;
+padding:15px;
+text-align:center;
+border-radius:10px;
+font-weight:bold;
+}
+
+.menu a:hover{
+background:#4B0082;
+}
+
+footer{
+background:#6A0DAD;
+color:white;
+text-align:center;
+padding:20px;
+margin-top:30px;
+}
+
+</style>
+
+<script>
+
+function adminAction(action){
+
+alert(action + " feature will be connected with PHP & MySQL.");
+
+}
+
+</script>
+
+</head>
+
+<body>
+
+<header>
+
+<h2>Talentvora Admin Panel</h2>
+
+<nav>
+
+<a href="dashboard.html">Dashboard</a>
+
+<a href="homefeed.html">Home Feed</a>
+
+<a href="profile.html">Profile</a>
+
+<a href="index.html">Logout</a>
+
+</nav>
+
+</header>
+
+<section class="hero">
+
+<h1>👨‍💼 Admin Dashboard</h1>
+
+<p>Manage the entire Talentvora platform from one place.</p>
+
+</section>
+
+<div class="stats">
+
+<div class="box">
+<h2>1200</h2>
+<p>Users</p>
+</div>
+
+<div class="box">
+<h2>850</h2>
+<p>Posts</p>
+</div>
+
+<div class="box">
+<h2>75</h2>
+<p>Reports</p>
+</div>
+
+<div class="box">
+<h2>98%</h2>
+<p>Security</p>
+</div>
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<h3>👥 Manage Users</h3>
+
+<p>Add, edit or remove users.</p>
+
+<button onclick="adminAction('Manage Users')">Open</button>
+
+</div>
+
+<div class="card">
+
+<h3>📝 Manage Posts</h3>
+
+<p>Approve or delete posts.</p>
+
+<button onclick="adminAction('Manage Posts')">Open</button>
+
+</div>
+
+<div class="card">
+
+<h3>🚩 Review Reports</h3>
+
+<p>Check reported content.</p>
+
+<button onclick="adminAction('Review Reports')">Open</button>
+
+</div>
+
+<div class="card">
+
+<h3>❌ Remove Content</h3>
+
+<p>Delete inappropriate content.</p>
+
+<button onclick="adminAction('Remove Content')">Open</button>
+
+</div>
+
+<div class="card">
+
+<h3>🏆 Manage Challenges</h3>
+
+<p>Create and update challenges.</p>
+
+<button onclick="adminAction('Manage Challenges')">Open</button>
+
+</div>
+
+<div class="card">
+
+<h3>💬 View Feedback</h3>
+
+<p>Read user suggestions.</p>
+
+<button onclick="adminAction('View Feedback')">Open</button>
+
+</div>
+
+<div class="card">
+
+<h3>📊 Website Analytics</h3>
+
+<p>Monitor website growth.</p>
+
+<button onclick="adminAction('Website Analytics')">Open</button>
+
+</div>
+
+<div class="card">
+
+<h3>🔒 Security</h3>
+
+<p>Manage security settings.</p>
+
+<button onclick="adminAction('Security')">Open</button>
+
+</div>
+
+</div>
+
+<section class="menu">
+
+<a href="dashboard.html">🏠 Dashboard</a>
+
+<a href="profile.html">👤 Profile</a>
+
+<a href="homefeed.html">📰 Home Feed</a>
+
+<a href="mood.html">😊 Mood Zone</a>
+
+<a href="entertainment.html">😂 Entertainment</a>
+
+<a href="learning.html">📚 Learning Hub</a>
+
+<a href="talent.html">🎨 Talent Showcase</a>
+
+<a href="community.html">👥 Community</a>
+
+<a href="chat.html">💬 Messaging</a>
+
+<a href="notifications.html">🔔 Notifications</a>
+
+<a href="challenges.html">🏆 Challenges</a>
+
+</section>
+
+<footer>
+
+<p>© 2026 Talentvora | Admin Panel</p>
+
+</footer>
+
+</body>
+</html>
