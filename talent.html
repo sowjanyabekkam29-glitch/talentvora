@@ -186,6 +186,14 @@ margin-bottom:8px;
 .post .desc{
 margin-bottom:0;
 }
+
+.post{cursor:pointer;}
+.post:hover{transform:translateY(-6px);}
+.thumbwrap{position:relative;background:#000;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.thumbwrap video,.thumbwrap img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;}
+.thumbwrap .music{width:100%;height:100%;background:linear-gradient(135deg,#6A0DAD,#9B59B6);color:white;font-size:54px;display:flex;align-items:center;justify-content:center;}
+.thumbwrap .play{position:absolute;width:56px;height:56px;border-radius:50%;background:rgba(0,0,0,.6);color:white;font-size:24px;display:flex;align-items:center;justify-content:center;}
+.post .body h3{font-size:17px;}
 </style>
 
 <script>
@@ -347,15 +355,10 @@ window.location.href = "upload.html?category=" + encodeURIComponent(name);
 
 <script type="module">
 import { supabase } from './supabase-config.js';
-import { requireLogin, logoutUser } from './auth.js';
+import { protectPage } from './guard.js';
 
 const postsEl = document.getElementById('posts');
 const statusEl = document.getElementById('status');
-
-document.getElementById('logout').addEventListener('click', (e) => {
-  e.preventDefault();
-  logoutUser();
-});
 
 function safeUrl(u) {
   try {
@@ -364,32 +367,47 @@ function safeUrl(u) {
   } catch { return null; }
 }
 
-function mediaEl(type, src) {
-  const href = safeUrl(src);
-  if (!href) return null;
-  const el = document.createElement(type === 'image' ? 'img' : type);
-  el.src = href;
-  if (type === 'video' || type === 'audio') { el.controls = true; el.preload = 'metadata'; }
-  if (type === 'image') { el.loading = 'lazy'; el.alt = ''; }
-  return el;
+function thumb(p) {
+  const wrap = document.createElement('div');
+  wrap.className = 'thumbwrap';
+  const src = safeUrl(p.media_url);
+
+  if (p.media_type === 'video' && src) {
+    const v = document.createElement('video');
+    v.src = src + '#t=0.5';
+    v.preload = 'metadata';
+    v.muted = true;
+    v.playsInline = true;
+    wrap.append(v);
+    const play = document.createElement('div');
+    play.className = 'play';
+    play.textContent = '▶';
+    wrap.append(play);
+  } else if (p.media_type === 'image' && src) {
+    const i = document.createElement('img');
+    i.src = src;
+    i.loading = 'lazy';
+    i.alt = '';
+    wrap.append(i);
+  } else {
+    const m = document.createElement('div');
+    m.className = 'music';
+    m.textContent = '🎵';
+    wrap.append(m);
+  }
+  return wrap;
 }
 
 function render(posts) {
   postsEl.innerHTML = '';
   statusEl.textContent = posts.length ? '' : 'No uploads yet. Be the first to share your talent!';
+
   for (const p of posts) {
     const card = document.createElement('div');
     card.className = 'card post';
+    card.addEventListener('click', () => { window.location.href = 'watch.html?id=' + encodeURIComponent(p.id); });
 
-    if (['video', 'audio', 'image'].includes(p.media_type)) {
-      const el = mediaEl(p.media_type, p.media_url);
-      if (el) {
-        const box = document.createElement('div');
-        box.className = 'media';
-        box.append(el);
-        card.append(box);
-      }
-    }
+    card.append(thumb(p));
 
     const body = document.createElement('div');
     body.className = 'body';
@@ -401,27 +419,22 @@ function render(posts) {
     meta.className = 'meta';
     const who = p.profiles?.full_name || 'Talentvora member';
     const cat = p.talent_categories ? (p.talent_categories.emoji || '') + ' ' + p.talent_categories.name + ' • ' : '';
-    meta.textContent = cat + who + ' • ' + new Date(p.created_at).toLocaleDateString();
+    const v = Number(p.views || 0);
+    meta.textContent = cat + who + ' • ' + v.toLocaleString() + ' view' + (v === 1 ? '' : 's') + ' • ' + new Date(p.created_at).toLocaleDateString();
 
     body.append(h, meta);
-    if (p.description) {
-      const d = document.createElement('p');
-      d.className = 'desc';
-      d.textContent = p.description;
-      body.append(d);
-    }
     card.append(body);
     postsEl.append(card);
   }
 }
 
 async function load() {
-  const session = await requireLogin();
+  const session = await protectPage();
   if (!session) return;
 
   const { data, error } = await supabase
     .from('talent_posts')
-    .select('id, title, description, media_url, media_type, created_at, profiles(full_name), talent_categories(name, emoji)')
+    .select('id, title, description, media_url, media_type, views, created_at, profiles(full_name), talent_categories(name, emoji)')
     .order('created_at', { ascending: false })
     .limit(24);
 
