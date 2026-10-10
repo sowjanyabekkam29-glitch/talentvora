@@ -3,75 +3,234 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Talentvora | Register</title>
+<title>Talentvora | Login</title>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif;}
-body{background:linear-gradient(to right,#6A0DAD,#9B59B6);display:flex;justify-content:center;align-items:center;height:100vh;}
-.container{background:white;width:420px;padding:35px;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,.3);}
-h2{text-align:center;color:#6A0DAD;margin-bottom:20px;}
-input{width:100%;padding:12px;margin:10px 0;border:1px solid #ccc;border-radius:8px;font-size:16px;}
-button{width:100%;padding:12px;background:#6A0DAD;color:white;border:none;border-radius:8px;font-size:18px;cursor:pointer;margin-top:15px;}
-button:hover{background:#4B0082;}
-button:disabled{opacity:.6;cursor:wait;}
-p{text-align:center;margin-top:20px;}
-#msg{color:#c0392b;font-size:14px;margin-top:10px;text-align:center;}
-a{color:#6A0DAD;font-weight:bold;text-decoration:none;}
-a:hover{text-decoration:underline;}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:linear-gradient(to right,#6A0DAD,#9B59B6);
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.container{
+background:white;
+width:400px;
+padding:35px;
+border-radius:15px;
+box-shadow:0 5px 15px rgba(0,0,0,.3);
+}
+
+h2{
+text-align:center;
+color:#6A0DAD;
+margin-bottom:20px;
+}
+
+input{
+width:100%;
+padding:12px;
+margin:10px 0;
+border:1px solid #ccc;
+border-radius:8px;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#6A0DAD;
+color:white;
+border:none;
+border-radius:8px;
+font-size:18px;
+cursor:pointer;
+margin-top:15px;
+}
+
+button:hover{
+background:#4B0082;
+}
+
+button:disabled{
+opacity:.6;
+cursor:wait;
+}
+
+.options{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-top:10px;
+font-size:14px;
+}
+
+.options input{
+width:auto;
+margin:0 6px 0 0;
+}
+
+a{
+color:#6A0DAD;
+text-decoration:none;
+font-weight:bold;
+}
+
+a:hover{
+text-decoration:underline;
+}
+
+p{
+text-align:center;
+margin-top:20px;
+}
+
+#msg{
+color:#c0392b;
+font-size:14px;
+margin-top:12px;
+text-align:center;
+}
+
+
+.pw{
+position:relative;
+margin:10px 0;
+}
+
+.pw input{
+margin:0;
+padding-right:50px;
+}
+
+.pw .eye{
+position:absolute;
+right:6px;
+top:50%;
+transform:translateY(-50%);
+width:auto;
+margin:0;
+padding:6px 10px;
+background:transparent;
+color:#6A0DAD;
+font-size:18px;
+border:none;
+}
+
+.pw .eye:hover{
+background:transparent;
+}
+
 </style>
+
 </head>
+
 <body>
+
 <div class="container">
-<h2>Create Account</h2>
-<form id="regForm">
-<input type="text" id="fullName" placeholder="Full Name" required pattern="[A-Za-z ]+" title="Name should contain only letters">
-<input type="email" id="email" placeholder="Email Address" required>
-<input type="password" id="password" placeholder="Password (min 6 characters)" minlength="6" required>
-<input type="password" id="confirm" placeholder="Confirm Password" required>
-<input type="text" id="skills" placeholder="Skills (comma separated)">
-<input type="text" id="interests" placeholder="Interests (comma separated)">
-<button type="submit" id="btn">Register</button>
+
+<h2>Login to Talentvora</h2>
+
+<form id="loginForm">
+
+<input
+type="email"
+id="email"
+placeholder="Enter Email"
+required>
+
+<div class="pw">
+<input
+type="password"
+id="password"
+placeholder="Enter Password"
+required>
+<button type="button" class="eye" aria-label="Show password">👁️</button>
+</div>
+
+<div class="options">
+
+<label>
+<input type="checkbox" checked>
+Remember Me
+</label>
+
+<a href="#">Forgot Password?</a>
+
+</div>
+
+<button type="submit" id="btn">Login</button>
+
 <div id="msg"></div>
+
 </form>
-<p>Already have an account? <a href="login.html">Login</a></p>
+
+<p>
+
+Don't have an account?
+
+<a href="register.html">Register</a>
+
+</p>
+
 </div>
 
 <script type="module">
-import { registerUser, loginUser } from './auth.js';
 import { supabase } from './supabase-config.js';
+import { loginUser } from './auth.js';
 
-// Already signed in? Skip registration and go to the app.
+const form = document.getElementById('loginForm');
+const msg = document.getElementById('msg');
+const btn = document.getElementById('btn');
+
+// Already signed in? Go straight to the dashboard.
 supabase.auth.getSession().then(({ data }) => {
   if (data.session) window.location.href = 'dashboard.html';
 });
 
-const form = document.getElementById('regForm');
-const msg = document.getElementById('msg');
-const btn = document.getElementById('btn');
-
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   msg.textContent = '';
-  if (password.value !== confirm.value) { msg.textContent = 'Passwords do not match.'; return; }
+
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+
+  if (!email || !password) {
+    msg.textContent = 'Please enter Email and Password';
+    return;
+  }
+
   btn.disabled = true;
-  const { data, error } = await registerUser({
-    fullName: fullName.value.trim(),
-    email: email.value.trim(),
-    password: password.value,
-    skills: skills.value,
-    interests: interests.value,
-  });
+  const { error } = await loginUser(email, password);
   btn.disabled = false;
-  if (error) { msg.textContent = error.message; return; }
-  if (data.session) { window.location.href = 'dashboard.html'; return; }
 
-  // No session returned: sign in right away with the same credentials
-  const login = await loginUser(email.value.trim(), password.value);
-  if (!login.error) { window.location.href = 'dashboard.html'; return; }
+  if (error) {
+    msg.textContent = error.message;
+    return;
+  }
+  window.location.href = 'dashboard.html';
+});
 
-  msg.textContent = login.error.message.toLowerCase().includes('confirm')
-    ? 'Email confirmation is still turned on in Supabase. Turn off "Confirm email" in Authentication settings.'
-    : login.error.message;
+// Show / hide password
+document.querySelectorAll('.eye').forEach((b) => {
+  b.addEventListener('click', () => {
+    const input = b.parentElement.querySelector('input');
+    const show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    b.textContent = show ? '🙈' : '👁️';
+    b.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+  });
 });
 </script>
+
 </body>
 </html>
