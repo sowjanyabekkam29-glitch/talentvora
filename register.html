@@ -36,7 +36,13 @@ a:hover{text-decoration:underline;}
 </div>
 
 <script type="module">
-import { registerUser } from './auth.js';
+import { registerUser, loginUser } from './auth.js';
+import { supabase } from './supabase-config.js';
+
+// Already signed in? Skip registration and go to the app.
+supabase.auth.getSession().then(({ data }) => {
+  if (data.session) window.location.href = 'dashboard.html';
+});
 
 const form = document.getElementById('regForm');
 const msg = document.getElementById('msg');
@@ -56,8 +62,15 @@ form.addEventListener('submit', async (e) => {
   });
   btn.disabled = false;
   if (error) { msg.textContent = error.message; return; }
-  if (data.session) { window.location.href = 'dashboard.html'; }
-  else { msg.style.color = '#27ae60'; msg.textContent = 'Check your email to confirm, then log in.'; }
+  if (data.session) { window.location.href = 'dashboard.html'; return; }
+
+  // No session returned: sign in right away with the same credentials
+  const login = await loginUser(email.value.trim(), password.value);
+  if (!login.error) { window.location.href = 'dashboard.html'; return; }
+
+  msg.textContent = login.error.message.toLowerCase().includes('confirm')
+    ? 'Email confirmation is still turned on in Supabase. Turn off "Confirm email" in Authentication settings.'
+    : login.error.message;
 });
 </script>
 </body>
