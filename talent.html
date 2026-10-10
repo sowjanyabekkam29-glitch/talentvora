@@ -3,446 +3,406 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Talentvora | Talent Showcase</title>
+<title>Talentvora | Watch</title>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif;}
+body{background:#f4f6fb;color:#222;}
 
-body{
-background:#f4f6fb;
-}
+header{background:#6A0DAD;color:white;display:flex;justify-content:space-between;align-items:center;padding:15px 30px;}
+header h2{font-size:30px;}
+nav a{color:white;text-decoration:none;margin-left:20px;font-weight:bold;}
+nav a:hover{color:yellow;}
 
-header{
-background:#6A0DAD;
-color:white;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:15px 30px;
-}
+.layout{max-width:1300px;margin:24px auto;padding:0 20px;display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:24px;}
+@media(max-width:950px){.layout{grid-template-columns:1fr;}}
 
-header h2{
-font-size:30px;
-}
+/* Player */
+.player{background:#000;border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:240px;}
+.player video{width:100%;max-height:70vh;display:block;background:#000;}
+.player img{width:100%;max-height:70vh;object-fit:contain;display:block;}
+.player .audiobox{width:100%;padding:60px 20px;text-align:center;background:linear-gradient(135deg,#6A0DAD,#9B59B6);}
+.player .audiobox .note{font-size:70px;margin-bottom:20px;}
+.player audio{width:90%;}
 
-nav a{
-color:white;
-text-decoration:none;
-margin-left:20px;
-font-weight:bold;
-}
+h1#title{font-size:22px;margin:16px 0 10px;line-height:1.3;word-break:break-word;}
 
-nav a:hover{
-color:yellow;
-}
+.row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.channel{display:flex;align-items:center;gap:12px;}
+.avatar{width:44px;height:44px;border-radius:50%;background:#6A0DAD;color:white;font-weight:bold;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.avatar.sm{width:36px;height:36px;font-size:15px;}
+.channel .name{font-weight:bold;}
+.channel .cat{font-size:13px;color:#777;}
 
-.hero{
-background:linear-gradient(to right,#6A0DAD,#9B59B6);
-color:white;
-text-align:center;
-padding:40px;
-}
+.actions{display:flex;gap:10px;flex-wrap:wrap;}
+.pill{background:#ece4f5;color:#4B0082;border:none;border-radius:20px;padding:10px 18px;font-size:15px;font-weight:bold;cursor:pointer;}
+.pill:hover{background:#dccbee;}
+.pill.on{background:#6A0DAD;color:white;}
+.pill.danger{background:#fde8e8;color:#c0392b;}
+.pill:disabled{opacity:.6;cursor:wait;}
 
-.hero h1{
-font-size:40px;
-margin-bottom:10px;
-}
+.descbox{background:white;border-radius:12px;padding:16px 18px;margin-top:16px;box-shadow:0 2px 8px rgba(0,0,0,.08);}
+.stats{font-weight:bold;margin-bottom:8px;}
+#desc{white-space:pre-wrap;line-height:1.6;word-break:break-word;color:#444;}
 
-.hero p{
-font-size:18px;
-}
+/* Comments */
+.comments{margin-top:26px;}
+.comments h3{margin-bottom:14px;}
+.addc{display:flex;gap:12px;align-items:flex-start;margin-bottom:22px;}
+.addc .box{flex:1;}
+.addc input{width:100%;padding:10px 4px;border:none;border-bottom:2px solid #ccc;background:transparent;font-size:15px;outline:none;}
+.addc input:focus{border-bottom-color:#6A0DAD;}
+.addc .btns{display:flex;justify-content:flex-end;gap:10px;margin-top:10px;}
+.btn{background:#6A0DAD;color:white;border:none;border-radius:20px;padding:9px 20px;font-size:14px;font-weight:bold;cursor:pointer;}
+.btn:hover{background:#4B0082;}
+.btn:disabled{opacity:.5;cursor:default;}
+.btn.light{background:transparent;color:#555;}
+.btn.light:hover{background:#eee;}
+.comment{display:flex;gap:12px;margin-bottom:18px;}
+.comment .who{font-size:13px;font-weight:bold;}
+.comment .when{font-weight:normal;color:#888;margin-left:6px;}
+.comment .text{margin-top:3px;line-height:1.5;word-break:break-word;white-space:pre-wrap;}
+.comment .del{background:none;border:none;color:#c0392b;font-size:12px;cursor:pointer;margin-top:4px;padding:0;}
 
-.container{
-padding:40px;
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:20px;
-}
+/* Up next */
+.side h3{margin-bottom:14px;}
+.rel{display:flex;gap:10px;margin-bottom:14px;text-decoration:none;color:inherit;}
+.rel:hover .rt{color:#6A0DAD;}
+.thumb{width:168px;height:94px;border-radius:8px;overflow:hidden;background:#000;flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center;}
+.thumb video,.thumb img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;}
+.thumb .music{width:100%;height:100%;background:linear-gradient(135deg,#6A0DAD,#9B59B6);color:white;font-size:34px;display:flex;align-items:center;justify-content:center;}
+.thumb .badge{position:absolute;bottom:5px;right:5px;background:rgba(0,0,0,.75);color:white;font-size:11px;padding:2px 6px;border-radius:4px;}
+.rt{font-weight:bold;font-size:14px;line-height:1.3;margin-bottom:4px;word-break:break-word;}
+.rm{font-size:12px;color:#777;line-height:1.5;}
 
-.card{
-background:white;
-padding:20px;
-border-radius:15px;
-box-shadow:0px 5px 15px rgba(0,0,0,.2);
-transition:.3s;
-}
-
-.card:hover{
-transform:translateY(-8px);
-}
-
-.card h3{
-color:#6A0DAD;
-margin-bottom:10px;
-}
-
-.card p{
-margin-bottom:15px;
-line-height:1.6;
-}
-
-button{
-background:#6A0DAD;
-color:white;
-padding:10px 20px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-}
-
-button:hover{
-background:#4B0082;
-}
-
-.menu{
-padding:30px;
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-gap:15px;
-}
-
-.menu a{
-background:#6A0DAD;
-color:white;
-text-decoration:none;
-padding:15px;
-text-align:center;
-border-radius:10px;
-font-weight:bold;
-}
-
-.menu a:hover{
-background:#4B0082;
-}
-
-footer{
-background:#6A0DAD;
-color:white;
-text-align:center;
-padding:20px;
-margin-top:20px;
-}
-
-/* ---- Latest uploads ---- */
-.section-title{
-padding:10px 40px 0;
-color:#6A0DAD;
-font-size:28px;
-}
-
-#status{
-padding:15px 40px 0;
-color:#555;
-}
-
-.post{
-padding:0;
-overflow:hidden;
-}
-
-.post:hover{
-transform:none;
-}
-
-.media{
-background:#000;
-display:flex;
-align-items:center;
-justify-content:center;
-}
-
-.media video,
-.media img{
-width:100%;
-max-height:260px;
-object-fit:contain;
-display:block;
-}
-
-.media audio{
-width:92%;
-margin:40px 0;
-}
-
-.post .body{
-padding:16px 20px 20px;
-}
-
-.post h3{
-margin-bottom:6px;
-}
-
-.post .meta{
-font-size:13px;
-color:#777;
-margin-bottom:8px;
-}
-
-.post .desc{
-margin-bottom:0;
-}
-
-.post{cursor:pointer;}
-.post:hover{transform:translateY(-6px);}
-.thumbwrap{position:relative;background:#000;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;overflow:hidden;}
-.thumbwrap video,.thumbwrap img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;}
-.thumbwrap .music{width:100%;height:100%;background:linear-gradient(135deg,#6A0DAD,#9B59B6);color:white;font-size:54px;display:flex;align-items:center;justify-content:center;}
-.thumbwrap .play{position:absolute;width:56px;height:56px;border-radius:50%;background:rgba(0,0,0,.6);color:white;font-size:24px;display:flex;align-items:center;justify-content:center;}
-.post .body h3{font-size:17px;}
+#error{display:none;max-width:600px;margin:80px auto;text-align:center;padding:0 20px;}
+#error h2{color:#6A0DAD;margin-bottom:10px;}
+#error a{color:#6A0DAD;font-weight:bold;}
+.muted{color:#777;font-size:14px;}
 </style>
-
-<script>
-
-function uploadTalent(name){
-window.location.href = "upload.html?category=" + encodeURIComponent(name);
-}
-
-</script>
 </head>
 
 <body>
 
 <header>
-
 <h2>Talentvora</h2>
-
 <nav>
-
 <a href="dashboard.html">Dashboard</a>
-
-<a href="homefeed.html">Home Feed</a>
-
+<a href="talent.html">Talent Showcase</a>
 <a href="profile.html">Profile</a>
-
-<a href="index.html" id="logout">Logout</a>
-
+<a href="login.html" id="logout">Logout</a>
 </nav>
-
 </header>
 
-<section class="hero">
+<div id="error">
+<h2 id="errTitle">Post not found</h2>
+<p><a href="talent.html">Back to Talent Showcase</a></p>
+</div>
 
-<h1>🎨 Talent Showcase</h1>
+<main class="layout" id="layout">
 
-<p>Share your talents and inspire the Talentvora community.</p>
+<section>
+<div class="player" id="player"></div>
 
+<h1 id="title">Loading...</h1>
+
+<div class="row">
+<div class="channel">
+<div class="avatar" id="avatar">?</div>
+<div>
+<div class="name" id="uploader"></div>
+<div class="cat" id="category"></div>
+</div>
+</div>
+
+<div class="actions">
+<button class="pill" id="likeBtn">👍 <span id="likeCount">0</span></button>
+<button class="pill" id="shareBtn">🔗 Share</button>
+<button class="pill danger" id="deleteBtn" style="display:none">🗑 Delete</button>
+</div>
+</div>
+
+<div class="descbox">
+<div class="stats" id="stats"></div>
+<div id="desc"></div>
+</div>
+
+<div class="comments">
+<h3 id="ccount">Comments</h3>
+
+<div class="addc">
+<div class="avatar sm" id="myAvatar">?</div>
+<div class="box">
+<input type="text" id="cinput" maxlength="1000" placeholder="Add a comment...">
+<div class="btns" id="cbtns" style="display:none">
+<button class="btn light" id="ccancel" type="button">Cancel</button>
+<button class="btn" id="csubmit" type="button" disabled>Comment</button>
+</div>
+</div>
+</div>
+
+<div id="clist"></div>
+</div>
 </section>
 
-<div class="container">
+<aside class="side">
+<h3>Up next</h3>
+<div id="related"></div>
+</aside>
 
-<div class="card">
-
-<h3>🎤 Singing</h3>
-
-<p>Upload your singing performances.</p>
-
-<button onclick="uploadTalent('Singing')">Upload</button>
-
-</div>
-
-<div class="card">
-
-<h3>💃 Dancing</h3>
-
-<p>Share your dance videos.</p>
-
-<button onclick="uploadTalent('Dancing')">Upload</button>
-
-</div>
-
-<div class="card">
-
-<h3>🎨 Drawing</h3>
-
-<p>Showcase your artwork and sketches.</p>
-
-<button onclick="uploadTalent('Drawing')">Upload</button>
-
-</div>
-
-<div class="card">
-
-<h3>📷 Photography</h3>
-
-<p>Upload your best photographs.</p>
-
-<button onclick="uploadTalent('Photography')">Upload</button>
-
-</div>
-
-<div class="card">
-
-<h3>💻 Coding</h3>
-
-<p>Share your coding projects and ideas.</p>
-
-<button onclick="uploadTalent('Coding')">Upload</button>
-
-</div>
-
-<div class="card">
-
-<h3>🍳 Cooking</h3>
-
-<p>Post your cooking recipes and videos.</p>
-
-<button onclick="uploadTalent('Cooking')">Upload</button>
-
-</div>
-
-<div class="card">
-
-<h3>✍️ Writing</h3>
-
-<p>Publish stories, poems, and articles.</p>
-
-<button onclick="uploadTalent('Writing')">Upload</button>
-
-</div>
-
-<div class="card">
-
-<h3>🎙 Public Speaking</h3>
-
-<p>Upload speeches and presentations.</p>
-
-<button onclick="uploadTalent('Public Speaking')">Upload</button>
-
-</div>
-
-</div>
-
-<h2 class="section-title">Latest Uploads</h2>
-
-<p id="status">Loading posts...</p>
-
-<div class="container" id="posts"></div>
-
-<section class="menu">
-
-<a href="profile.html">👤 Profile</a>
-
-<a href="mood.html">😊 Mood Zone</a>
-
-<a href="entertainment.html">😂 Entertainment</a>
-
-<a href="learning.html">📚 Learning Hub</a>
-
-<a href="community.html">👥 Community</a>
-
-<a href="chat.html">💬 Messaging</a>
-
-<a href="notifications.html">🔔 Notifications</a>
-
-<a href="challenges.html">🏆 Challenges</a>
-
-<a href="admin.html">👨‍💼 Admin Panel</a>
-
-<a href="dashboard.html">🏠 Dashboard</a>
-
-</section>
-
-<footer>
-
-<p>© 2026 Talentvora | Talent Showcase</p>
-
-</footer>
+</main>
 
 <script type="module">
 import { supabase } from './supabase-config.js';
 import { protectPage } from './guard.js';
 
-const postsEl = document.getElementById('posts');
-const statusEl = document.getElementById('status');
+const $ = (id) => document.getElementById(id);
+const postId = new URLSearchParams(location.search).get('id');
 
+let me = null;
+let myName = '';
+let post = null;
+let liked = false;
+let likeCount = 0;
+
+// ---------- helpers ----------
 function safeUrl(u) {
-  try {
-    const url = new URL(u);
-    return (url.protocol === 'https:' || url.protocol === 'http:') ? url.href : null;
-  } catch { return null; }
+  try { const x = new URL(u); return (x.protocol === 'https:' || x.protocol === 'http:') ? x.href : null; }
+  catch { return null; }
+}
+function ago(d) {
+  const s = Math.floor((Date.now() - new Date(d)) / 1000);
+  const units = [['year', 31536000], ['month', 2592000], ['day', 86400], ['hour', 3600], ['minute', 60]];
+  for (const [n, v] of units) { const c = Math.floor(s / v); if (c >= 1) return c + ' ' + n + (c > 1 ? 's' : '') + ' ago'; }
+  return 'just now';
+}
+function initial(name) { return (name || '?').trim().charAt(0).toUpperCase() || '?'; }
+function fail(title) {
+  $('layout').style.display = 'none';
+  $('errTitle').textContent = title;
+  $('error').style.display = 'block';
 }
 
-function thumb(p) {
-  const wrap = document.createElement('div');
-  wrap.className = 'thumbwrap';
+function thumbEl(p) {
+  const t = document.createElement('div');
+  t.className = 'thumb';
   const src = safeUrl(p.media_url);
-
   if (p.media_type === 'video' && src) {
     const v = document.createElement('video');
-    v.src = src + '#t=0.5';
-    v.preload = 'metadata';
-    v.muted = true;
-    v.playsInline = true;
-    wrap.append(v);
-    const play = document.createElement('div');
-    play.className = 'play';
-    play.textContent = '▶';
-    wrap.append(play);
+    v.src = src + '#t=0.5'; v.preload = 'metadata'; v.muted = true; v.playsInline = true;
+    t.append(v);
+    const b = document.createElement('span'); b.className = 'badge'; b.textContent = '▶'; t.append(b);
   } else if (p.media_type === 'image' && src) {
-    const i = document.createElement('img');
-    i.src = src;
-    i.loading = 'lazy';
-    i.alt = '';
-    wrap.append(i);
+    const i = document.createElement('img'); i.src = src; i.loading = 'lazy'; i.alt = ''; t.append(i);
   } else {
-    const m = document.createElement('div');
-    m.className = 'music';
-    m.textContent = '🎵';
-    wrap.append(m);
+    const m = document.createElement('div'); m.className = 'music'; m.textContent = '🎵'; t.append(m);
   }
-  return wrap;
+  return t;
 }
 
-function render(posts) {
-  postsEl.innerHTML = '';
-  statusEl.textContent = posts.length ? '' : 'No uploads yet. Be the first to share your talent!';
+// ---------- render post ----------
+function renderPost() {
+  document.title = post.title + ' | Talentvora';
+  $('title').textContent = post.title;
 
-  for (const p of posts) {
-    const card = document.createElement('div');
-    card.className = 'card post';
-    card.addEventListener('click', () => { window.location.href = 'watch.html?id=' + encodeURIComponent(p.id); });
+  const player = $('player');
+  player.innerHTML = '';
+  const src = safeUrl(post.media_url);
+  if (src && post.media_type === 'video') {
+    const v = document.createElement('video'); v.src = src; v.controls = true; v.preload = 'metadata'; v.playsInline = true; player.append(v);
+  } else if (src && post.media_type === 'image') {
+    const i = document.createElement('img'); i.src = src; i.alt = post.title; player.append(i);
+  } else if (src && post.media_type === 'audio') {
+    const box = document.createElement('div'); box.className = 'audiobox';
+    const n = document.createElement('div'); n.className = 'note'; n.textContent = '🎵';
+    const a = document.createElement('audio'); a.src = src; a.controls = true; a.preload = 'metadata';
+    box.append(n, a); player.append(box);
+  } else {
+    const p = document.createElement('p'); p.className = 'muted'; p.style.color = '#ccc'; p.textContent = 'No media for this post.'; player.append(p);
+  }
 
-    card.append(thumb(p));
+  const who = post.profiles?.full_name || 'Talentvora member';
+  $('uploader').textContent = who;
+  $('avatar').textContent = initial(who);
+  $('category').textContent = post.talent_categories ? ((post.talent_categories.emoji || '') + ' ' + post.talent_categories.name).trim() : '';
 
-    const body = document.createElement('div');
-    body.className = 'body';
+  const views = Number(post.views || 0);
+  $('stats').textContent = views.toLocaleString() + ' view' + (views === 1 ? '' : 's') + ' • ' + ago(post.created_at);
+  $('desc').textContent = post.description || 'No description.';
+  $('deleteBtn').style.display = post.user_id === me ? '' : 'none';
+}
 
-    const h = document.createElement('h3');
-    h.textContent = p.title;
+// ---------- likes ----------
+function paintLike() {
+  $('likeCount').textContent = likeCount;
+  $('likeBtn').classList.toggle('on', liked);
+}
+async function loadLikes() {
+  const [{ count }, mine] = await Promise.all([
+    supabase.from('post_likes').select('*', { count: 'exact', head: true }).eq('post_id', postId),
+    supabase.from('post_likes').select('post_id').eq('post_id', postId).eq('user_id', me).maybeSingle(),
+  ]);
+  likeCount = count || 0;
+  liked = !!mine.data;
+  paintLike();
+}
+$('likeBtn').addEventListener('click', async () => {
+  const btn = $('likeBtn');
+  btn.disabled = true;
+  if (liked) {
+    const { error } = await supabase.from('post_likes').delete().eq('post_id', postId).eq('user_id', me);
+    if (!error) { liked = false; likeCount = Math.max(0, likeCount - 1); }
+  } else {
+    const { error } = await supabase.from('post_likes').insert({ post_id: postId });
+    if (!error) { liked = true; likeCount += 1; }
+  }
+  paintLike();
+  btn.disabled = false;
+});
 
-    const meta = document.createElement('div');
-    meta.className = 'meta';
-    const who = p.profiles?.full_name || 'Talentvora member';
-    const cat = p.talent_categories ? (p.talent_categories.emoji || '') + ' ' + p.talent_categories.name + ' • ' : '';
+// ---------- share / delete ----------
+$('shareBtn').addEventListener('click', async () => {
+  const btn = $('shareBtn');
+  try { await navigator.clipboard.writeText(location.href); btn.textContent = '✔ Link copied'; }
+  catch { window.prompt('Copy this link:', location.href); }
+  setTimeout(() => { btn.textContent = '🔗 Share'; }, 2000);
+});
+
+$('deleteBtn').addEventListener('click', async () => {
+  if (!window.confirm('Delete this post? This cannot be undone.')) return;
+  $('deleteBtn').disabled = true;
+  const { error } = await supabase.from('talent_posts').delete().eq('id', postId);
+  if (error) { alert('Could not delete: ' + error.message); $('deleteBtn').disabled = false; return; }
+  // remove the stored file too (best effort)
+  const url = post.media_url || '';
+  const marker = '/talent-media/';
+  const i = url.indexOf(marker);
+  if (i !== -1) {
+    try { await supabase.storage.from('talent-media').remove([decodeURIComponent(url.slice(i + marker.length))]); } catch {}
+  }
+  window.location.href = 'talent.html';
+});
+
+// ---------- comments ----------
+let commentTotal = 0;
+function paintCount() { $('ccount').textContent = commentTotal + ' Comment' + (commentTotal === 1 ? '' : 's'); }
+
+function commentEl(c) {
+  const row = document.createElement('div');
+  row.className = 'comment';
+  const name = c.profiles?.full_name || 'Talentvora member';
+
+  const av = document.createElement('div'); av.className = 'avatar sm'; av.textContent = initial(name);
+
+  const body = document.createElement('div');
+  const who = document.createElement('div'); who.className = 'who';
+  who.textContent = name;
+  const when = document.createElement('span'); when.className = 'when'; when.textContent = ago(c.created_at);
+  who.append(when);
+  const text = document.createElement('div'); text.className = 'text'; text.textContent = c.body;
+  body.append(who, text);
+
+  if (c.user_id === me) {
+    const del = document.createElement('button'); del.className = 'del'; del.textContent = 'Delete';
+    del.addEventListener('click', async () => {
+      const { error } = await supabase.from('post_comments').delete().eq('id', c.id);
+      if (!error) { row.remove(); commentTotal -= 1; paintCount(); }
+    });
+    body.append(del);
+  }
+  row.append(av, body);
+  return row;
+}
+
+async function loadComments() {
+  const { data, error } = await supabase
+    .from('post_comments')
+    .select('id, user_id, body, created_at, profiles(full_name)')
+    .eq('post_id', postId)
+    .order('created_at', { ascending: false });
+  if (error) { $('clist').textContent = 'Could not load comments.'; return; }
+  commentTotal = data.length;
+  paintCount();
+  const list = $('clist'); list.innerHTML = '';
+  data.forEach((c) => list.append(commentEl(c)));
+}
+
+const cinput = $('cinput'), csubmit = $('csubmit'), cbtns = $('cbtns');
+cinput.addEventListener('focus', () => { cbtns.style.display = 'flex'; });
+cinput.addEventListener('input', () => { csubmit.disabled = !cinput.value.trim(); });
+$('ccancel').addEventListener('click', () => { cinput.value = ''; csubmit.disabled = true; cbtns.style.display = 'none'; });
+csubmit.addEventListener('click', async () => {
+  const body = cinput.value.trim();
+  if (!body) return;
+  csubmit.disabled = true;
+  const { data, error } = await supabase
+    .from('post_comments')
+    .insert({ post_id: postId, body })
+    .select('id, user_id, body, created_at, profiles(full_name)')
+    .single();
+  if (error) { alert('Could not post comment: ' + error.message); csubmit.disabled = false; return; }
+  $('clist').prepend(commentEl(data));
+  commentTotal += 1; paintCount();
+  cinput.value = ''; cbtns.style.display = 'none';
+});
+
+// ---------- up next ----------
+async function loadRelated() {
+  const { data } = await supabase
+    .from('talent_posts')
+    .select('id, title, media_url, media_type, views, created_at, profiles!talent_posts_user_id_fkey(full_name)')
+    .neq('id', postId)
+    .order('created_at', { ascending: false })
+    .limit(12);
+  const box = $('related'); box.innerHTML = '';
+  if (!data || !data.length) { box.innerHTML = '<p class="muted">No other posts yet.</p>'; return; }
+  for (const p of data) {
+    const a = document.createElement('a');
+    a.className = 'rel';
+    a.href = 'watch.html?id=' + encodeURIComponent(p.id);
+    const info = document.createElement('div');
+    const t = document.createElement('div'); t.className = 'rt'; t.textContent = p.title;
+    const m = document.createElement('div'); m.className = 'rm';
     const v = Number(p.views || 0);
-    meta.textContent = cat + who + ' • ' + v.toLocaleString() + ' view' + (v === 1 ? '' : 's') + ' • ' + new Date(p.created_at).toLocaleDateString();
-
-    body.append(h, meta);
-    card.append(body);
-    postsEl.append(card);
+    m.textContent = (p.profiles?.full_name || 'Talentvora member') + ' • ' + v.toLocaleString() + ' view' + (v === 1 ? '' : 's') + ' • ' + ago(p.created_at);
+    info.append(t, m);
+    a.append(thumbEl(p), info);
+    box.append(a);
   }
 }
 
-async function load() {
+// ---------- init ----------
+async function init() {
   const session = await protectPage();
   if (!session) return;
+  me = session.user.id;
+  if (!postId) return fail('No post selected');
 
   const { data, error } = await supabase
     .from('talent_posts')
-    .select('id, title, description, media_url, media_type, views, created_at, profiles(full_name), talent_categories(name, emoji)')
-    .order('created_at', { ascending: false })
-    .limit(24);
+    .select('id, user_id, title, description, media_url, media_type, views, created_at, profiles!talent_posts_user_id_fkey(full_name), talent_categories!talent_posts_category_id_fkey(name, emoji)')
+    .eq('id', postId)
+    .maybeSingle();
+  if (error) return fail('Could not load this post: ' + error.message);
+  if (!data) return fail('This post does not exist or was removed');
+  post = data;
 
-  if (error) { statusEl.textContent = 'Could not load posts: ' + error.message; return; }
-  render(data);
+  // count one view per browser session
+  const key = 'viewed:' + postId;
+  if (!sessionStorage.getItem(key)) {
+    sessionStorage.setItem(key, '1');
+    const { error: e } = await supabase.rpc('increment_post_views', { p_post_id: postId });
+    if (!e) post.views = Number(post.views || 0) + 1;
+  }
+
+  const { data: mine } = await supabase.from('profiles').select('full_name').eq('id', me).maybeSingle();
+  myName = mine?.full_name || '';
+  $('myAvatar').textContent = initial(myName);
+
+  renderPost();
+  loadLikes(); loadComments(); loadRelated();
 }
-
-load();
+init();
 </script>
 
 </body>
