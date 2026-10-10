@@ -128,9 +128,10 @@ textarea{min-height:110px;resize:vertical;}
 <div id="done">
 <div class="tick">✓</div>
 <h2>Upload complete!</h2>
-<p class="sub">Your post is now live in the Talent Showcase.</p>
+<p class="sub">Your post is now live. Watch it, share the link and see comments.</p>
 <div class="actions">
-<a class="btn" href="talent.html">View Talent Showcase</a>
+<a class="btn" href="talent.html" id="watchLink">▶ Watch your post</a>
+<a class="btn light" href="talent.html">Talent Showcase</a>
 <a class="btn light" href="upload.html" id="again">Upload another</a>
 </div>
 </div>
@@ -258,13 +259,13 @@ submitBtn.addEventListener('click', async () => {
     pct.textContent = 'Saving post...';
 
     const { data: pub } = supabase.storage.from('talent-media').getPublicUrl(path);
-    const { error } = await supabase.from('talent_posts').insert({
+    const { data: created, error } = await supabase.from('talent_posts').insert({
       title,
       description: descEl.value.trim() || null,
       category_id: catEl.value ? Number(catEl.value) : null,
       media_url: pub.publicUrl,
       media_type: mediaKind(file.type),
-    });
+    }).select('id').single();
 
     if (error) {
       await supabase.storage.from('talent-media').remove([path]); // clean up orphan file
@@ -273,6 +274,7 @@ submitBtn.addEventListener('click', async () => {
 
     details.style.display = 'none';
     $('sub').style.display = 'none';
+    $('watchLink').href = 'watch.html?id=' + created.id;
     $('done').style.display = 'block';
   } catch (err) {
     progressBox.style.display = 'none';
