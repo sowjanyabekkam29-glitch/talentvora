@@ -61,11 +61,22 @@ button:hover{
 background:#4B0082;
 }
 
+button:disabled{
+opacity:.6;
+cursor:wait;
+}
+
 .options{
 display:flex;
 justify-content:space-between;
+align-items:center;
 margin-top:10px;
 font-size:14px;
+}
+
+.options input{
+width:auto;
+margin:0 6px 0 0;
 }
 
 a{
@@ -83,29 +94,14 @@ text-align:center;
 margin-top:20px;
 }
 
+#msg{
+color:#c0392b;
+font-size:14px;
+margin-top:12px;
+text-align:center;
+}
+
 </style>
-
-<script>
-
-function loginUser(){
-
-let email=document.getElementById("email").value;
-let password=document.getElementById("password").value;
-
-if(email=="" || password==""){
-alert("Please enter Email and Password");
-return false;
-}
-
-alert("Login Successful!");
-
-window.location.href="dashboard.html";
-
-return false;
-
-}
-
-</script>
 
 </head>
 
@@ -115,7 +111,7 @@ return false;
 
 <h2>Login to Talentvora</h2>
 
-<form onsubmit="return loginUser()">
+<form id="loginForm">
 
 <input
 type="email"
@@ -132,7 +128,7 @@ required>
 <div class="options">
 
 <label>
-<input type="checkbox">
+<input type="checkbox" checked>
 Remember Me
 </label>
 
@@ -140,7 +136,9 @@ Remember Me
 
 </div>
 
-<button type="submit">Login</button>
+<button type="submit" id="btn">Login</button>
+
+<div id="msg"></div>
 
 </form>
 
@@ -153,6 +151,43 @@ Don't have an account?
 </p>
 
 </div>
+
+<script type="module">
+import { supabase } from './supabase-config.js';
+import { loginUser } from './auth.js';
+
+const form = document.getElementById('loginForm');
+const msg = document.getElementById('msg');
+const btn = document.getElementById('btn');
+
+// Already signed in? Go straight to the dashboard.
+supabase.auth.getSession().then(({ data }) => {
+  if (data.session) window.location.href = 'dashboard.html';
+});
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  msg.textContent = '';
+
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+
+  if (!email || !password) {
+    msg.textContent = 'Please enter Email and Password';
+    return;
+  }
+
+  btn.disabled = true;
+  const { error } = await loginUser(email, password);
+  btn.disabled = false;
+
+  if (error) {
+    msg.textContent = error.message;
+    return;
+  }
+  window.location.href = 'dashboard.html';
+});
+</script>
 
 </body>
 </html>
