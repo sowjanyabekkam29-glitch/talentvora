@@ -6,7 +6,6 @@
 <title>Talentvora | Talent Showcase</title>
 
 <style>
-
 *{
 margin:0;
 padding:0;
@@ -129,16 +128,73 @@ padding:20px;
 margin-top:20px;
 }
 
+/* ---- Latest uploads ---- */
+.section-title{
+padding:10px 40px 0;
+color:#6A0DAD;
+font-size:28px;
+}
+
+#status{
+padding:15px 40px 0;
+color:#555;
+}
+
+.post{
+padding:0;
+overflow:hidden;
+}
+
+.post:hover{
+transform:none;
+}
+
+.media{
+background:#000;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.media video,
+.media img{
+width:100%;
+max-height:260px;
+object-fit:contain;
+display:block;
+}
+
+.media audio{
+width:92%;
+margin:40px 0;
+}
+
+.post .body{
+padding:16px 20px 20px;
+}
+
+.post h3{
+margin-bottom:6px;
+}
+
+.post .meta{
+font-size:13px;
+color:#777;
+margin-bottom:8px;
+}
+
+.post .desc{
+margin-bottom:0;
+}
 </style>
 
 <script>
 
 function uploadTalent(name){
-alert("Upload your " + name + " here!");
+window.location.href = "upload.html?category=" + encodeURIComponent(name);
 }
 
 </script>
-
 </head>
 
 <body>
@@ -155,7 +211,7 @@ alert("Upload your " + name + " here!");
 
 <a href="profile.html">Profile</a>
 
-<a href="index.html">Logout</a>
+<a href="index.html" id="logout">Logout</a>
 
 </nav>
 
@@ -172,54 +228,92 @@ alert("Upload your " + name + " here!");
 <div class="container">
 
 <div class="card">
+
 <h3>🎤 Singing</h3>
+
 <p>Upload your singing performances.</p>
+
 <button onclick="uploadTalent('Singing')">Upload</button>
+
 </div>
 
 <div class="card">
+
 <h3>💃 Dancing</h3>
+
 <p>Share your dance videos.</p>
+
 <button onclick="uploadTalent('Dancing')">Upload</button>
+
 </div>
 
 <div class="card">
+
 <h3>🎨 Drawing</h3>
+
 <p>Showcase your artwork and sketches.</p>
+
 <button onclick="uploadTalent('Drawing')">Upload</button>
+
 </div>
 
 <div class="card">
+
 <h3>📷 Photography</h3>
+
 <p>Upload your best photographs.</p>
+
 <button onclick="uploadTalent('Photography')">Upload</button>
+
 </div>
 
 <div class="card">
+
 <h3>💻 Coding</h3>
+
 <p>Share your coding projects and ideas.</p>
+
 <button onclick="uploadTalent('Coding')">Upload</button>
+
 </div>
 
 <div class="card">
+
 <h3>🍳 Cooking</h3>
+
 <p>Post your cooking recipes and videos.</p>
+
 <button onclick="uploadTalent('Cooking')">Upload</button>
+
 </div>
 
 <div class="card">
+
 <h3>✍️ Writing</h3>
+
 <p>Publish stories, poems, and articles.</p>
+
 <button onclick="uploadTalent('Writing')">Upload</button>
+
 </div>
 
 <div class="card">
+
 <h3>🎙 Public Speaking</h3>
+
 <p>Upload speeches and presentations.</p>
+
 <button onclick="uploadTalent('Public Speaking')">Upload</button>
+
 </div>
 
 </div>
+
+<h2 class="section-title">Latest Uploads</h2>
+
+<p id="status">Loading posts...</p>
+
+<div class="container" id="posts"></div>
 
 <section class="menu">
 
@@ -250,6 +344,93 @@ alert("Upload your " + name + " here!");
 <p>© 2026 Talentvora | Talent Showcase</p>
 
 </footer>
+
+<script type="module">
+import { supabase } from './supabase-config.js';
+import { requireLogin, logoutUser } from './auth.js';
+
+const postsEl = document.getElementById('posts');
+const statusEl = document.getElementById('status');
+
+document.getElementById('logout').addEventListener('click', (e) => {
+  e.preventDefault();
+  logoutUser();
+});
+
+function safeUrl(u) {
+  try {
+    const url = new URL(u);
+    return (url.protocol === 'https:' || url.protocol === 'http:') ? url.href : null;
+  } catch { return null; }
+}
+
+function mediaEl(type, src) {
+  const href = safeUrl(src);
+  if (!href) return null;
+  const el = document.createElement(type === 'image' ? 'img' : type);
+  el.src = href;
+  if (type === 'video' || type === 'audio') { el.controls = true; el.preload = 'metadata'; }
+  if (type === 'image') { el.loading = 'lazy'; el.alt = ''; }
+  return el;
+}
+
+function render(posts) {
+  postsEl.innerHTML = '';
+  statusEl.textContent = posts.length ? '' : 'No uploads yet. Be the first to share your talent!';
+  for (const p of posts) {
+    const card = document.createElement('div');
+    card.className = 'card post';
+
+    if (['video', 'audio', 'image'].includes(p.media_type)) {
+      const el = mediaEl(p.media_type, p.media_url);
+      if (el) {
+        const box = document.createElement('div');
+        box.className = 'media';
+        box.append(el);
+        card.append(box);
+      }
+    }
+
+    const body = document.createElement('div');
+    body.className = 'body';
+
+    const h = document.createElement('h3');
+    h.textContent = p.title;
+
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    const who = p.profiles?.full_name || 'Talentvora member';
+    const cat = p.talent_categories ? (p.talent_categories.emoji || '') + ' ' + p.talent_categories.name + ' • ' : '';
+    meta.textContent = cat + who + ' • ' + new Date(p.created_at).toLocaleDateString();
+
+    body.append(h, meta);
+    if (p.description) {
+      const d = document.createElement('p');
+      d.className = 'desc';
+      d.textContent = p.description;
+      body.append(d);
+    }
+    card.append(body);
+    postsEl.append(card);
+  }
+}
+
+async function load() {
+  const session = await requireLogin();
+  if (!session) return;
+
+  const { data, error } = await supabase
+    .from('talent_posts')
+    .select('id, title, description, media_url, media_type, created_at, profiles(full_name), talent_categories(name, emoji)')
+    .order('created_at', { ascending: false })
+    .limit(24);
+
+  if (error) { statusEl.textContent = 'Could not load posts: ' + error.message; return; }
+  render(data);
+}
+
+load();
+</script>
 
 </body>
 </html>
