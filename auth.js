@@ -16,7 +16,7 @@ export async function loginUser(email, password) {
 
 export async function logoutUser() {
   await supabase.auth.signOut();
-  window.location.href = 'index.html';
+  window.location.href = 'login.html';
 }
 
 // Call at the top of protected pages (dashboard, profile, talent, ...)
