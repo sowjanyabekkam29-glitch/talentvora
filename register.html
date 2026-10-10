@@ -55,7 +55,7 @@ background:transparent;
 <input type="text" id="fullName" placeholder="Full Name" required pattern="[A-Za-z ]+" title="Name should contain only letters">
 <input type="email" id="email" placeholder="Email Address" required>
 <div class="pw"><input type="password" id="password" placeholder="Password (min 6 characters)" minlength="6" required><button type="button" class="eye" aria-label="Show password">👁️</button></div>
-<div class="pw"><input type="password" id="confirm" placeholder="Confirm Password" required><button type="button" class="eye" aria-label="Show password">👁️</button></div>
+<div class="pw"><input type="password" id="confirmPassword" placeholder="Confirm Password" required><button type="button" class="eye" aria-label="Show password">👁️</button></div>
 <input type="text" id="skills" placeholder="Skills (comma separated)">
 <input type="text" id="interests" placeholder="Interests (comma separated)">
 <button type="submit" id="btn">Register</button>
@@ -73,28 +73,35 @@ supabase.auth.getSession().then(({ data }) => {
   if (data.session) window.location.href = 'dashboard.html';
 });
 
-const form = document.getElementById('regForm');
+const $ = (id) => document.getElementById(id);
+const form = $('regForm');
+const fullNameEl = $('fullName');
+const emailEl = $('email');
+const passwordEl = $('password');
+const confirmEl = $('confirmPassword');
+const skillsEl = $('skills');
+const interestsEl = $('interests');
 const msg = document.getElementById('msg');
 const btn = document.getElementById('btn');
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   msg.textContent = '';
-  if (password.value !== confirm.value) { msg.textContent = 'Passwords do not match.'; return; }
+  if (passwordEl.value !== confirmEl.value) { msg.textContent = 'Passwords do not match.'; return; }
   btn.disabled = true;
   const { data, error } = await registerUser({
-    fullName: fullName.value.trim(),
-    email: email.value.trim(),
-    password: password.value,
-    skills: skills.value,
-    interests: interests.value,
+    fullName: fullNameEl.value.trim(),
+    email: emailEl.value.trim(),
+    password: passwordEl.value,
+    skills: skillsEl.value,
+    interests: interestsEl.value,
   });
   btn.disabled = false;
   if (error) { msg.textContent = error.message; return; }
   if (data.session) { window.location.href = 'dashboard.html'; return; }
 
   // No session returned: sign in right away with the same credentials
-  const login = await loginUser(email.value.trim(), password.value);
+  const login = await loginUser(emailEl.value.trim(), passwordEl.value);
   if (!login.error) { window.location.href = 'dashboard.html'; return; }
 
   msg.textContent = login.error.message.toLowerCase().includes('confirm')
