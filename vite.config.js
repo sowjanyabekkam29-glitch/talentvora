@@ -28,6 +28,7 @@ export default defineConfig({
         register: page('register'),
         talent: page('talent'),
         upload: page('upload'),
+        watch: page('watch'),
       },
     },
   },
