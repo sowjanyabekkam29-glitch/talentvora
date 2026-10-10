@@ -1,11 +1,33 @@
 import { defineConfig } from 'vite'
-import react, { reactCompilerPreset } from '@vitejs/plugin-react'
-import babel from '@rolldown/plugin-babel'
+import react from '@vitejs/plugin-react'
+import { fileURLToPath } from 'node:url'
 
-// https://vite.dev/config/
+// Builds every HTML page, not just index.html
+const page = (name) => fileURLToPath(new URL(`./${name}.html`, import.meta.url))
+
 export default defineConfig({
-  plugins: [
-    react(),
-    babel({ presets: [reactCompilerPreset()] })
-  ],
+  plugins: [react()],
+  build: {
+    rollupOptions: {
+      input: {
+        index: page('index'),
+        about: page('about'),
+        admin: page('admin'),
+        challenges: page('challenges'),
+        chat: page('chat'),
+        community: page('community'),
+        dashboard: page('dashboard'),
+        entertainment: page('entertainment'),
+        feedback: page('feedback'),
+        homefeed: page('homefeed'),
+        learning: page('learning'),
+        login: page('login'),
+        mood: page('mood'),
+        notifications: page('notifications'),
+        profile: page('profile'),
+        register: page('register'),
+        talent: page('talent'),
+      },
+    },
+  },
 })
