@@ -27,6 +27,7 @@ export default defineConfig({
         profile: page('profile'),
         register: page('register'),
         talent: page('talent'),
+        upload: page('upload'),
       },
     },
   },
