@@ -127,6 +127,64 @@ text-align:center;
 padding:20px;
 margin-top:20px;
 }
+
+/* ---- Resources from Supabase ---- */
+.section-title{
+padding:10px 40px 0;
+color:#6A0DAD;
+font-size:28px;
+}
+
+.chips{
+padding:15px 40px 0;
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+}
+
+.chip{
+background:white;
+color:#6A0DAD;
+border:2px solid #6A0DAD;
+padding:8px 16px;
+border-radius:20px;
+font-weight:bold;
+}
+
+.chip.active,
+.chip:hover{
+background:#6A0DAD;
+color:white;
+}
+
+.tag{
+display:inline-block;
+background:#f1e6fa;
+color:#6A0DAD;
+font-size:13px;
+font-weight:bold;
+padding:4px 10px;
+border-radius:12px;
+margin-bottom:10px;
+}
+
+.card a.open{
+display:inline-block;
+background:#6A0DAD;
+color:white;
+text-decoration:none;
+padding:10px 20px;
+border-radius:8px;
+}
+
+.card a.open:hover{
+background:#4B0082;
+}
+
+#status{
+padding:20px 40px 0;
+color:#555;
+}
 </style>
 
 <script>
@@ -157,7 +215,7 @@ alert("Daily Quiz Started!");
 
 <a href="profile.html">Profile</a>
 
-<a href="index.html">Logout</a>
+<a href="index.html" id="logout">Logout</a>
 
 </nav>
 
@@ -170,6 +228,16 @@ alert("Daily Quiz Started!");
 <p>Learn new skills and improve your knowledge every day.</p>
 
 </section>
+
+<h2 class="section-title">Learning Resources</h2>
+
+<div class="chips" id="chips"></div>
+
+<p id="status">Loading resources...</p>
+
+<div class="container" id="resources"></div>
+
+<h2 class="section-title">More to Explore</h2>
 
 <div class="container">
 
@@ -286,6 +354,100 @@ View Progress
 <p>© 2026 Talentvora | Learning Hub</p>
 
 </footer>
+
+<script type="module">
+import { supabase } from './supabase-config.js';
+import { requireLogin, logoutUser } from './auth.js';
+
+const chipsEl = document.getElementById('chips');
+const listEl = document.getElementById('resources');
+const statusEl = document.getElementById('status');
+
+document.getElementById('logout').addEventListener('click', (e) => {
+  e.preventDefault();
+  logoutUser();
+});
+
+let resources = [];
+let active = 'All';
+
+function safeUrl(u) {
+  try {
+    const url = new URL(u);
+    return (url.protocol === 'https:' || url.protocol === 'http:') ? url.href : null;
+  } catch { return null; }
+}
+
+function render() {
+  listEl.innerHTML = '';
+  const shown = resources.filter(r => active === 'All' || r.category === active);
+  statusEl.textContent = shown.length ? '' : 'No resources in this category yet.';
+  for (const r of shown) {
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const tag = document.createElement('span');
+    tag.className = 'tag';
+    tag.textContent = r.category;
+
+    const h = document.createElement('h3');
+    h.textContent = r.title;
+
+    const p = document.createElement('p');
+    p.textContent = r.description || '';
+
+    card.append(tag, h, p);
+
+    const href = safeUrl(r.url);
+    if (href) {
+      const a = document.createElement('a');
+      a.className = 'open';
+      a.href = href;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.textContent = 'Open';
+      card.append(a);
+    }
+    listEl.append(card);
+  }
+}
+
+function renderChips() {
+  const names = ['All', ...new Set(resources.map(r => r.category))];
+  chipsEl.innerHTML = '';
+  for (const n of names) {
+    const b = document.createElement('button');
+    b.className = 'chip' + (n === active ? ' active' : '');
+    b.textContent = n;
+    b.addEventListener('click', () => { active = n; renderChips(); render(); });
+    chipsEl.append(b);
+  }
+}
+
+async function load() {
+  const session = await requireLogin();
+  if (!session) return;
+
+  const { data, error } = await supabase
+    .from('learning_resources')
+    .select('id, title, url, description, talent_categories(name)')
+    .order('created_at', { ascending: true });
+
+  if (error) { statusEl.textContent = 'Could not load resources: ' + error.message; return; }
+
+  resources = data.map(r => ({
+    id: r.id,
+    title: r.title,
+    url: r.url,
+    description: r.description,
+    category: r.talent_categories?.name ?? 'General',
+  }));
+  renderChips();
+  render();
+}
+
+load();
+</script>
 
 </body>
 </html>
