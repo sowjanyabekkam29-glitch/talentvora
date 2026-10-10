@@ -101,6 +101,35 @@ margin-top:12px;
 text-align:center;
 }
 
+
+.pw{
+position:relative;
+margin:10px 0;
+}
+
+.pw input{
+margin:0;
+padding-right:50px;
+}
+
+.pw .eye{
+position:absolute;
+right:6px;
+top:50%;
+transform:translateY(-50%);
+width:auto;
+margin:0;
+padding:6px 10px;
+background:transparent;
+color:#6A0DAD;
+font-size:18px;
+border:none;
+}
+
+.pw .eye:hover{
+background:transparent;
+}
+
 </style>
 
 </head>
@@ -119,11 +148,14 @@ id="email"
 placeholder="Enter Email"
 required>
 
+<div class="pw">
 <input
 type="password"
 id="password"
 placeholder="Enter Password"
 required>
+<button type="button" class="eye" aria-label="Show password">👁️</button>
+</div>
 
 <div class="options">
 
@@ -186,6 +218,17 @@ form.addEventListener('submit', async (e) => {
     return;
   }
   window.location.href = 'dashboard.html';
+});
+
+// Show / hide password
+document.querySelectorAll('.eye').forEach((b) => {
+  b.addEventListener('click', () => {
+    const input = b.parentElement.querySelector('input');
+    const show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    b.textContent = show ? '🙈' : '👁️';
+    b.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+  });
 });
 </script>
 
