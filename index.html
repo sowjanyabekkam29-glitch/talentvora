@@ -158,7 +158,7 @@ function refresh(){go(curv[0],curv[1],true)}
 async function notify(uid,type,body,post){if(uid&&uid!==U.id)await SB.from("notifications").insert({user_id:uid,actor_id:U.id,type,post_id:post||null,body})}
 async function unread(){const r=await SB.from("notifications").select("*",H).eq("user_id",U.id).eq("is_read",false),b=$("#bd"),c=r.count||0;b.textContent=c;b.style.display=c?"":"none"}
 async function fetchAll(mk){let r=await mk().limit(1000);if(r.error)throw new Error(r.error.message||"Couldn’t load posts");return r.data||[]}
-async function posts(kind){const d=await fetchAll(()=>{const q=SB.from("posts").select("*,profiles(id,username,display_name,avatar_emoji,avatar_url),cheers(user_id),comments(id)").order("created_at",{ascending:false});return kind?q.eq("kind",kind):q.neq("kind","story")});d.forEach(p=>{AU[p.id]=p.author_id;PD[p.id]=p});return d}
+async function posts(kind){const d=await fetchAll(()=>{const q=SB.from("posts").select("*,profiles!posts_author_id_fkey(id,username,display_name,avatar_emoji,avatar_url),cheers(user_id),comments(id)").order("created_at",{ascending:false});return kind?q.eq("kind",kind):q.neq("kind","story")});d.forEach(p=>{AU[p.id]=p.author_id;PD[p.id]=p});return d}
 const med=p=>p.media_url?(/\.(mp4|webm|mov)(\?|$)/i.test(p.media_url)?`<video src="${esc(p.media_url)}" controls playsinline></video>`:`<img src="${esc(p.media_url)}" alt="">`):esc((p.profiles&&p.profiles.avatar_emoji)||"🌟");
 const supBtn=id=>`<button class="btn alt" data-sup="${id}">${sup.has(id)?"Supporting ✓":"Support"}</button>`;
 function lin(t){return esc(t).replace(/(?<![&\w])#(\w+)/g,'<span class="tg" data-tag="$1">#$1</span>')}
@@ -227,7 +227,7 @@ v.innerHTML=`<div class="card pad"><div class="row" style="gap:18px"><div class=
 wire();$("#lo").onclick=()=>SB.auth.signOut();
 $("#eb2").onclick=()=>{$("#en").value=P.display_name||"";$("#eh").value=P.username;$("#ee").value=P.avatar_emoji||"";ph=null;rm=false;evShow();$("#ec").value=P.category;$("#eb").value=P.bio||"";$("#ex").textContent="";$("#ed").classList.add("show")}}};
 let SL=[],st=null,defKind="post",stream=null,rec=null,face="user";
-async function stories(){const r=await SB.from("posts").select("id,caption,media_url,created_at,profiles(id,username,display_name,avatar_emoji,avatar_url)").eq("kind","story").gte("created_at",new Date(Date.now()-864e5).toISOString()).order("created_at");return r.data||[]}
+async function stories(){const r=await SB.from("posts").select("id,caption,media_url,created_at,profiles!posts_author_id_fkey(id,username,display_name,avatar_emoji,avatar_url)").eq("kind","story").gte("created_at",new Date(Date.now()-864e5).toISOString()).order("created_at");return r.data||[]}
 function story(i){clearTimeout(st);const s=$("#story");if(i<0||i>=SL.length){s.classList.remove("show");s.innerHTML="";return}const d=SL[i],a=d.profiles||{},vid=/\.(mp4|webm|mov)(\?|$)/i.test(d.media_url||""),m="max-width:100vw;max-height:100vh;object-fit:contain";
 s.style.background=d.media_url?"#000":G[d.id%5];
 s.innerHTML=`<div class="pg"><i id="pgi"></i></div><button class="x" id="sx">✕</button>${d.media_url?(vid?`<video src="${esc(d.media_url)}" autoplay muted playsinline style="${m}"></video>`:`<img src="${esc(d.media_url)}" alt="" style="${m}">`):esc(a.avatar_emoji||"🌟")}<div class="cap"><b>${nm(a)}</b><br>${esc(d.caption)}</div>`;
@@ -241,7 +241,7 @@ $("#qb").onclick=async()=>{const e=$("#qe");e.textContent="Publishing…";const 
 const pth=`${U.id}/${Date.now()}.${ext}`,u=await SB.storage.from("memories").upload(pth,file,{contentType:file.type}),q=$("#qs");
 if(u.error){if(q)q.textContent="Couldn’t save to Memories: "+u.error.message;return}
 const r=await SB.from("memories").insert({user_id:U.id,path:pth,kind:vid?"video":"photo"}).select("id").single();mp=pth;mid=r.data&&r.data.id;if(q)q.textContent="Saved to Memories ✓"}
-const CATS=["Music","Dance","Art","Comedy","Sports","Cooking"],SEL="*,profiles(id,username,display_name,avatar_emoji,avatar_url),cheers(user_id),comments(id)";
+const CATS=["Music","Dance","Art","Comedy","Sports","Cooking"],SEL="*,profiles!posts_author_id_fkey(id,username,display_name,avatar_emoji,avatar_url),cheers(user_id),comments(id)";
 $("#pk").innerHTML=CATS.map(c=>`<option>${c}</option>`).join("");
 let peid=0;
 $("#pcx").onclick=()=>$("#pe").classList.remove("show");
