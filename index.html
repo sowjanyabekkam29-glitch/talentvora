@@ -157,7 +157,8 @@ function back(){const h=hist.pop();if(h)go(h[0],h[1],true);else go("show",undefi
 function refresh(){go(curv[0],curv[1],true)}
 async function notify(uid,type,body,post){if(uid&&uid!==U.id)await SB.from("notifications").insert({user_id:uid,actor_id:U.id,type,post_id:post||null,body})}
 async function unread(){const r=await SB.from("notifications").select("*",H).eq("user_id",U.id).eq("is_read",false),b=$("#bd"),c=r.count||0;b.textContent=c;b.style.display=c?"":"none"}
-async function posts(kind){let q=SB.from("posts").select("*,profiles(id,username,display_name,avatar_emoji,avatar_url),cheers(user_id),comments(id)").order("created_at",{ascending:false}).limit(1000);q=kind?q.eq("kind",kind):q.neq("kind","story");const r=await q;(r.data||[]).forEach(p=>{AU[p.id]=p.author_id;PD[p.id]=p});return r.data||[]}
+async function fetchAll(mk){let out=[],i=0;for(;;){const r=await mk().range(i,i+999);if(r.error)throw r.error;const d=r.data||[];out=out.concat(d);if(d.length<1000)break;i+=1000}return out}
+async function posts(kind){const d=await fetchAll(()=>{const q=SB.from("posts").select("*,profiles(id,username,display_name,avatar_emoji,avatar_url),cheers(user_id),comments(id)").order("created_at",{ascending:false});return kind?q.eq("kind",kind):q.neq("kind","story")});d.forEach(p=>{AU[p.id]=p.author_id;PD[p.id]=p});return d}
 const med=p=>p.media_url?(/\.(mp4|webm|mov)(\?|$)/i.test(p.media_url)?`<video src="${esc(p.media_url)}" controls playsinline></video>`:`<img src="${esc(p.media_url)}" alt="">`):esc((p.profiles&&p.profiles.avatar_emoji)||"🌟");
 const supBtn=id=>`<button class="btn alt" data-sup="${id}">${sup.has(id)?"Supporting ✓":"Support"}</button>`;
 function lin(t){return esc(t).replace(/(?<![&\w])#(\w+)/g,'<span class="tg" data-tag="$1">#$1</span>')}
@@ -250,7 +251,7 @@ function evShow(){const u=ph?URL.createObjectURL(ph):(rm?null:P.avatar_url);$("#
 $("#eu").onclick=()=>$("#ef").click();
 $("#ef").onchange=e=>{const f=e.target.files[0];if(!f)return;if(f.size>5e6){$("#ex").textContent="Photo must be under 5 MB.";return}$("#ex").textContent="";ph=f;rm=false;evShow()};
 $("#er").onclick=()=>{ph=null;rm=true;$("#ef").value="";evShow()};
-async function userPosts(id){const d=(await SB.from("posts").select(SEL).eq("author_id",id).neq("kind","story").order("created_at",{ascending:false}).limit(1000)).data||[];d.forEach(p=>{AU[p.id]=p.author_id;PD[p.id]=p});return d}
+async function userPosts(id){const d=await fetchAll(()=>SB.from("posts").select(SEL).eq("author_id",id).neq("kind","story").order("created_at",{ascending:false}));d.forEach(p=>{AU[p.id]=p.author_id;PD[p.id]=p});return d}
 function grid(l){return l.length?`<div class="grid3">${l.map(p=>`<div class="media card" data-post="${p.id}" style="background:${G[p.id%5]};font-size:44px;margin:0;cursor:pointer">${p.media_url&&!/\.(mp4|webm|mov)(\?|$)/i.test(p.media_url)?`<img src="${esc(p.media_url)}" alt="">`:p.media_url?"🎬":esc((p.profiles&&p.profiles.avatar_emoji)||"🌟")}</div>`).join("")}</div>`:empty("No posts yet.")}
 function prow(p){return`<div class="card pad row" data-user="${p.id}" style="cursor:pointer"><div class="av">${ai(p)}</div><div style="flex:1"><b>${nm(p)}</b><div class="mut">@${esc(p.username)} · ${esc(p.category||"")}</div></div>${p.id!==U.id?supBtn(p.id):""}</div>`}
 document.addEventListener("click",e=>{const t=e.target;if(t.closest("button,video,input,textarea,select,#emp"))return;const o=t.closest("[data-user],[data-post],[data-tag],[data-chat]");if(!o)return;if(o.dataset.user)go("user",o.dataset.user);else if(o.dataset.post)go("post",+o.dataset.post);else if(o.dataset.tag)go("search","#"+o.dataset.tag);else if(o.dataset.chat)go("chat",o.dataset.chat)});
